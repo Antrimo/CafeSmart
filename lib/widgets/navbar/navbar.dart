@@ -1,3 +1,7 @@
+import 'package:cafesmart/screens/expense_screen.dart';
+import 'package:cafesmart/screens/home_screen.dart';
+import 'package:cafesmart/screens/recommendation_screen.dart';
+import 'package:cafesmart/widgets/menu/drawer_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 
@@ -12,9 +16,9 @@ class _NavbarState extends State<Navbar> {
   int _selectedIndex = 0;
 
   final List<Widget> _pages = [
-    HomePage(),
-    SearchPage(),
-    ProfilePage(),
+    HomeScreen(),
+    RecommendationScreen(),
+    ExpenseScreen(),
   ];
 
   void _onItemTapped(int index) {
@@ -26,17 +30,8 @@ class _NavbarState extends State<Navbar> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        backgroundColor: Colors.black,
-        title: const Center(
-          child: Text(
-            'CafeSmart',
-            style: TextStyle(color: Colors.white,fontStyle: FontStyle.italic),
-          ),
-        ),
-      ),
       body: _pages[_selectedIndex],
+      drawer: DrawerMenu(),
       bottomNavigationBar: Container(
         padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
         decoration: BoxDecoration(
@@ -58,8 +53,8 @@ class _NavbarState extends State<Navbar> {
           onTabChange: _onItemTapped,
           tabs: const [
             GButton(icon: Icons.home, text: 'Home'),
-            GButton(icon: Icons.search, text: 'Search'),
-            GButton(icon: Icons.person, text: 'Profile'),
+            GButton(icon: Icons.search, text: 'Recommendation'),
+            GButton(icon: Icons.person, text: 'Expense'),
           ],
         ),
       ),
@@ -67,23 +62,6 @@ class _NavbarState extends State<Navbar> {
   }
 }
 
-class HomePage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Center(child: Text('Home Page'));
-  }
-}
 
-class SearchPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Center(child: Text('Search Page'));
-  }
-}
 
-class ProfilePage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Center(child: Text('Profile Page'));
-  }
-}
+
