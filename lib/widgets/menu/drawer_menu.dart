@@ -1,3 +1,4 @@
+import 'package:cafesmart/constants/color.dart';
 import 'package:cafesmart/screens/about_us_screen.dart';
 import 'package:cafesmart/screens/profile_screen.dart';
 import 'package:cafesmart/widgets/navbar/navbar.dart';
@@ -16,7 +17,7 @@ class _DrawerMenuState extends State<DrawerMenu> {
     ScreenHiddenDrawer(
       ItemHiddenMenu(
         name: "CaféSmart",
-        baseStyle: TextStyle(color: Colors.white.withOpacity(0.8), fontSize: 20.0),
+        baseStyle: TextStyle(color: Colors.white, fontSize: 20.0),
         colorLineSelected: Colors.deepPurple,
         selectedStyle: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
       ),
@@ -25,7 +26,7 @@ class _DrawerMenuState extends State<DrawerMenu> {
     ScreenHiddenDrawer(
       ItemHiddenMenu(
         name: "Profile",
-        baseStyle: TextStyle(color: Colors.white.withOpacity(0.8), fontSize: 20.0),
+        baseStyle: TextStyle(color: Colors.white, fontSize: 20.0),
         colorLineSelected: Colors.deepPurple,
         selectedStyle: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
       ),
@@ -34,7 +35,7 @@ class _DrawerMenuState extends State<DrawerMenu> {
     ScreenHiddenDrawer(
       ItemHiddenMenu(
         name: "About Us",
-        baseStyle: TextStyle(color: Colors.white.withOpacity(0.8), fontSize: 20.0),
+        baseStyle: TextStyle(color: Colors.white, fontSize: 20.0),
         colorLineSelected: Colors.deepPurple,
         selectedStyle: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
       ),
@@ -46,7 +47,7 @@ class _DrawerMenuState extends State<DrawerMenu> {
   Widget build(BuildContext context) {
     return HiddenDrawerMenu(
       screens: items,
-      backgroundColorMenu: Colors.deepPurple,
+      backgroundColorMenu: Colors.brown,
       slidePercent: 60.0,
       contentCornerRadius: 15.0,
       disableAppBarDefault: false,

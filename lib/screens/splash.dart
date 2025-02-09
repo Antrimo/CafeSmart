@@ -1,3 +1,4 @@
+import 'package:cafesmart/screens/introduction/app_introduction.dart';
 import 'package:cafesmart/widgets/menu/drawer_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
@@ -16,7 +17,7 @@ class Splash extends StatelessWidget {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => const DrawerMenu(),
+                builder: (context) => const AppIntroduction(),
               ),
             );
           },
