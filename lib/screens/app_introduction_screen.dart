@@ -2,8 +2,8 @@ import 'package:cafesmart/constants/color.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-class AppIntroduction extends StatelessWidget {
-  const AppIntroduction({super.key});
+class AppIntroductionScreen extends StatelessWidget {
+  const AppIntroductionScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

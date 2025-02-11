@@ -1,4 +1,5 @@
-import 'package:cafesmart/screens/introduction/app_introduction.dart';
+import 'package:cafesmart/screens/app_introduction_screen.dart';
+import 'package:cafesmart/screens/introduction/introduction_structure.dart';
 import 'package:cafesmart/widgets/menu/drawer_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -11,16 +12,20 @@ class Routing extends StatelessWidget {
       GoRoute(
         path: '/',
         builder: (BuildContext context, GoRouterState state) {
-          return const AppIntroduction();
+          return const AppIntroductionScreen();
         },
-        routes: <RouteBase>[
-          GoRoute(
-            path: '/menu',
-            builder: (BuildContext context, GoRouterState state) {
-              return const DrawerMenu();
-            },
-          ),
-        ]
+      ),
+      GoRoute(
+        path: '/menu',
+        builder: (BuildContext context, GoRouterState state) {
+          return const IntroductionStructure();
+        },
+      ),
+      GoRoute(
+        path: '/home',
+        builder: (BuildContext context, GoRouterState state) {
+          return const DrawerMenu();
+        },
       ),
     ],
   );
