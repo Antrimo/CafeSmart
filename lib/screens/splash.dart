@@ -1,4 +1,4 @@
-import 'package:cafesmart/screens/introduction/app_introduction.dart';
+import 'package:cafesmart/screens/app_introduction_screen.dart';
 import 'package:cafesmart/widgets/menu/drawer_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
@@ -14,12 +14,12 @@ class Splash extends StatelessWidget {
       body: Center(
         child: GestureDetector(
           onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const AppIntroduction(),
-              ),
-            );
+            // Navigator.push(
+            //   context,
+            //   MaterialPageRoute(
+            //     builder: (context) => const (),
+            //   ),
+            // );
           },
           child: Lottie.asset(
             'assets/splash.json',
