@@ -1,4 +1,6 @@
-import 'package:cafesmart/screens/app_introduction_screen.dart';
+import 'package:cafesmart/screens/authentication/login_screen.dart';
+import 'package:cafesmart/screens/authentication/signup_screen.dart';
+import 'package:cafesmart/screens/splash_screen.dart';
 import 'package:cafesmart/screens/introduction/introduction_structure.dart';
 import 'package:cafesmart/widgets/menu/drawer_menu.dart';
 import 'package:flutter/material.dart';
@@ -12,7 +14,19 @@ class Routing extends StatelessWidget {
       GoRoute(
         path: '/',
         builder: (BuildContext context, GoRouterState state) {
-          return const AppIntroductionScreen();
+          return const SplashScreen();
+        },
+      ),
+      GoRoute(
+        path: '/login',
+        builder: (BuildContext context, GoRouterState state) {
+          return const LoginScreen();
+        },
+      ),
+      GoRoute(
+        path: '/signup',
+        builder: (BuildContext context, GoRouterState state) {
+          return const SignUpScreen();
         },
       ),
       GoRoute(

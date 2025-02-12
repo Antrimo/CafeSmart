@@ -2,8 +2,8 @@ import 'package:cafesmart/constants/color.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-class AppIntroductionScreen extends StatelessWidget {
-  const AppIntroductionScreen({super.key});
+class SplashScreen extends StatelessWidget {
+  const SplashScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -62,7 +62,7 @@ class AppIntroductionScreen extends StatelessWidget {
             ),
             SizedBox(height: 100),
             GestureDetector(
-              onTap: () {},
+              onTap: () => context.go('/login'),
               child: Text(
                 "Already have an account? Log in",
                 style: TextStyle(

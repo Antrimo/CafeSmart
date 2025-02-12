@@ -74,10 +74,8 @@ class _IntroductionStructureState extends State<IntroductionStructure> {
                 ),
                 onLastPage
                     ? TextButton(
-                        onPressed: () => context
-                            .go('/home'),
-                        child:
-                            const Text("Done", style: TextStyle(fontSize: 14)),
+                        onPressed: () => context.go('/signup'),
+                        child: const Text("Done", style: TextStyle(fontSize: 14)),
                       )
                     : TextButton(
                         onPressed: _nextPage, // Move to the next page
