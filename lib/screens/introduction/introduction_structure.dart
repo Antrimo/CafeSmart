@@ -32,7 +32,7 @@ class _IntroductionStructureState extends State<IntroductionStructure> {
   }
 
   void _skipIntro() {
-    context.go('/home');
+    context.go('/signup');
   }
 
   @override
@@ -72,16 +72,8 @@ class _IntroductionStructureState extends State<IntroductionStructure> {
                     activeDotColor: Colors.blue,
                   ),
                 ),
-                onLastPage
-                    ? TextButton(
-                        onPressed: () => context.go('/signup'),
-                        child: const Text("Done", style: TextStyle(fontSize: 14)),
-                      )
-                    : TextButton(
-                        onPressed: _nextPage, // Move to the next page
-                        child: const Text("Next", style: TextStyle(fontSize: 14),
-                        ),
-                      ),
+                onLastPage ? TextButton(onPressed: () => context.go('/signup'), child: const Text("Done", style: TextStyle(fontSize: 14)),)
+                    : TextButton(onPressed: _nextPage, child: const Text("Next", style: TextStyle(fontSize: 14),),),
               ],
             ),
           ),
