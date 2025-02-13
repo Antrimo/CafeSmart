@@ -6,39 +6,48 @@ class RecommendationScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
     final List<Map<String, String>> recommendations = [
       {
-        "title": "Dosa with Coconut Chutney",
-        "description": "Crispy dosa served with flavorful coconut chutney.",
-        "image": "assets/images/menu/dosa.png"
+        "title": "Pizza + Coke",
+        "description":
+            "A classic combo! Enjoy a cheesy, oven-fresh pizza with a chilled Coke for the perfect bite.",
+        "image": "assets/images/menu/pizza.png"
       },
       {
-        "title": "Classic Margherita Pizza + Coke",
+        "title": "Dosa with Coconut Chutney",
         "description":
-            "Simple yet delicious pizza with fresh basil, cheese, and a chilled Coke.",
-        "image": "assets/images/menu/pizza.png"
+            "Golden crispy dosa paired with smooth, mildly sweet coconut chutney—South Indian delight at its best!",
+        "image": "assets/images/menu/dosa.png"
       },
       {
         "title": "Chana Kulcha with Lassi",
         "description":
-            "A perfect North Indian combo of spiced chana with soft kulchas and a refreshing lassi.",
+            "Spiced, flavorful chana served with soft kulchas, perfectly complemented by a creamy, chilled lassi.",
         "image": "assets/images/menu/kulcha.png"
       },
       {
-        "title": "Chowmin with tea",
+        "title": "Chowmein with Tea",
         "description":
-            "Creamy pasta served with a side of crispy garlic bread.",
-        "image": "assets/images/menu/chwomin.png"
+            "A fusion of flavors! Enjoy spicy, stir-fried chowmein alongside a warm cup of chai for a comforting meal.",
+        "image": "assets/images/menu/chowmein.png"
+      },
+      {
+        "title": "Paneer Patties",
+        "description":
+            "Crispy on the outside, stuffed with spicy paneer filling inside—a snack that’s both crunchy and creamy!",
+        "image": "assets/images/menu/paneer-patties.jpg"
       },
       {
         "title": "Burger + Cold Drink",
         "description":
-            "A juicy burger paired with crispy fries and a refreshing cold drink.",
+            "A juicy, cheesy burger served with crispy fries and a refreshing cold drink—an all-time favorite combo!",
         "image": "assets/images/menu/burger.jpg"
       },
       {
-        "title": "Aloo patties",
-        "description": "Allo pattie",
+        "title": "Aloo Patties",
+        "description":
+            "A perfect tea-time snack! Mashed potato filling seasoned with spices, wrapped in a crispy golden crust.",
         "image": "assets/images/menu/aloo-patties.jpg"
       },
     ];
@@ -49,21 +58,21 @@ class RecommendationScreen extends StatelessWidget {
           children: [
             Background(),
             ListView.builder(
-              padding: const EdgeInsets.all(16),
+              padding: EdgeInsets.all(screenWidth * 0.03),
               itemCount: recommendations.length,
               itemBuilder: (context, index) {
                 final food = recommendations[index];
                 return Card(
-                  margin: const EdgeInsets.only(bottom: 16),
+                  margin: EdgeInsets.only(bottom: screenWidth * 0.035),
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12)),
                   elevation: 5,
                   child: ListTile(
-                    contentPadding: const EdgeInsets.all(12),
+                    contentPadding: EdgeInsets.all(screenWidth * 0.03),
                     leading: Image.asset(
                       food["image"]!,
-                      width: 60,
-                      height: 60,
+                      width: screenWidth * 0.24,
+                      height: screenWidth * 0.24,
                       fit: BoxFit.cover,
                     ),
                     title: Text(

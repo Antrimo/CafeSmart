@@ -35,19 +35,20 @@ class _NavbarState extends State<Navbar> {
       bottomNavigationBar: Container(
         padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
         decoration: BoxDecoration(
-          color: Colors.black,
+          color: Color(0xFFC02626),
           boxShadow: [
             BoxShadow(
               blurRadius: 10,
-              color: Colors.black.withOpacity(0.1),
+              color: Color(0xFFC02626),
             ),
           ],
         ),
         child: GNav(
-          backgroundColor: Colors.black,
-          color: Colors.white,
-          activeColor: Colors.white,
-          tabBackgroundColor: Colors.grey.shade800,
+          backgroundColor: Color(0xFFC02626),
+          color: Colors.black,
+          activeColor: Colors.black,
+          // tabBackgroundColor: Colors.grey.shade800,
+          tabBackgroundColor: Colors.white,
           gap: 8,
           padding: const EdgeInsets.all(16),
           onTabChange: _onItemTapped,
@@ -61,7 +62,3 @@ class _NavbarState extends State<Navbar> {
     );
   }
 }
-
-
-
-
