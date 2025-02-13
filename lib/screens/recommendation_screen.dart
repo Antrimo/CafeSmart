@@ -58,7 +58,7 @@ class RecommendationScreen extends StatelessWidget {
           children: [
             Background(),
             ListView.builder(
-              padding: EdgeInsets.all(screenWidth * 0.03),
+              padding: EdgeInsets.all(screenWidth * 0.0301),
               itemCount: recommendations.length,
               itemBuilder: (context, index) {
                 final food = recommendations[index];
