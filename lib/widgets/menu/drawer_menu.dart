@@ -1,6 +1,6 @@
 import 'package:cafesmart/constants/color.dart';
-import 'package:cafesmart/screens/about_us_screen.dart';
-import 'package:cafesmart/screens/profile_screen.dart';
+import 'package:cafesmart/screens/menu/about_us_screen.dart';
+import 'package:cafesmart/screens/menu/profile_screen.dart';
 import 'package:cafesmart/widgets/navbar/navbar.dart';
 import 'package:flutter/material.dart';
 import 'package:hidden_drawer_menu/hidden_drawer_menu.dart';
