@@ -1,7 +1,7 @@
 import 'package:cafesmart/screens/menu_screen.dart';
 import 'package:flutter/material.dart';
 
-import '../background.dart';
+import '../widgets/background.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});

@@ -1,4 +1,4 @@
-import 'package:cafesmart/background.dart';
+import 'package:cafesmart/widgets/background.dart';
 import 'package:flutter/material.dart';
 
 class RecommendationScreen extends StatelessWidget {
