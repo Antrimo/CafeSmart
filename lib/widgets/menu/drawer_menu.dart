@@ -19,7 +19,8 @@ class _DrawerMenuState extends State<DrawerMenu> {
         name: "CaféSmart",
         baseStyle: TextStyle(color: Colors.white, fontSize: 20.0),
         colorLineSelected: Colors.deepPurple,
-        selectedStyle: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        selectedStyle:
+            const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
       ),
       const Navbar(),
     ),
@@ -28,7 +29,8 @@ class _DrawerMenuState extends State<DrawerMenu> {
         name: "Profile",
         baseStyle: TextStyle(color: Colors.white, fontSize: 20.0),
         colorLineSelected: Colors.deepPurple,
-        selectedStyle: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        selectedStyle:
+            const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
       ),
       const ProfileScreen(),
     ),
@@ -37,7 +39,8 @@ class _DrawerMenuState extends State<DrawerMenu> {
         name: "About Us",
         baseStyle: TextStyle(color: Colors.white, fontSize: 20.0),
         colorLineSelected: Colors.deepPurple,
-        selectedStyle: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        selectedStyle:
+            const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
       ),
       const AboutUsScreen(),
     ),
@@ -47,7 +50,7 @@ class _DrawerMenuState extends State<DrawerMenu> {
   Widget build(BuildContext context) {
     return HiddenDrawerMenu(
       screens: items,
-      backgroundColorMenu: Colors.brown,
+      backgroundColorMenu: Color(0xFFC02626),
       slidePercent: 60.0,
       contentCornerRadius: 15.0,
       disableAppBarDefault: false,
