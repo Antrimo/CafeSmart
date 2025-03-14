@@ -1,4 +1,3 @@
-import 'package:cafesmart/constants/color.dart';
 import 'package:cafesmart/screens/menu/about_us_screen.dart';
 import 'package:cafesmart/screens/menu/profile_screen.dart';
 import 'package:cafesmart/widgets/navbar/navbar.dart';
