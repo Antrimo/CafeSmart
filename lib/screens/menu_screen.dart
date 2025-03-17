@@ -9,9 +9,8 @@ class Menucarousel extends StatefulWidget {
 
 class _MenucarouselState extends State<Menucarousel> {
   late PageController _pageController;
-
-  // Menu data with title, subtitle, and image
-  final List<Map<String, String>> menus = [
+  TextEditingController _searchController = TextEditingController();
+  List<Map<String, String>> menus = [
     {
       "title": "Chana Kulcha",
       "subtitle": "Special",
@@ -44,21 +43,30 @@ class _MenucarouselState extends State<Menucarousel> {
     },
   ];
 
-  late final List<Map<String, String>> _loopedMenus = [
-    menus.last, // Add last item at the beginning
-    ...menus,
-    menus.first, // Add first item at the end
-  ];
+  List<Map<String, String>> filteredMenus = [];
 
   @override
   void initState() {
     super.initState();
+    _pageController = PageController(viewportFraction: 0.85);
+    filteredMenus = menus; // Initially, show all items
 
-    // Initialize the PageController with viewportFraction to show adjacent cards
-    _pageController = PageController(
-      initialPage: 1,
-      viewportFraction: 0.85, // Show parts of the next and previous cards
-    );
+    _searchController.addListener(() {
+      filterSearchResults(_searchController.text);
+    });
+  }
+
+  void filterSearchResults(String query) {
+    setState(() {
+      if (query.isEmpty) {
+        filteredMenus = menus;
+      } else {
+        filteredMenus = menus
+            .where((menu) =>
+                menu["title"]!.toLowerCase().contains(query.toLowerCase()))
+            .toList();
+      }
+    });
   }
 
   @override
@@ -67,124 +75,120 @@ class _MenucarouselState extends State<Menucarousel> {
     final screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       backgroundColor: Colors.transparent,
-      body: Center(
-        child: SizedBox(
-          height: screenHeight * 0.45, // Maintain existing height
-          width: screenWidth, // Maintain existing width
-          child: PageView.builder(
-            controller: _pageController,
-            onPageChanged: (index) {
-              // Handle looping when reaching padded items
-              if (index == 0) {
-                _pageController.jumpToPage(_loopedMenus.length - 2);
-              } else if (index == _loopedMenus.length - 1) {
-                _pageController.jumpToPage(1);
-              }
-            },
-            itemCount: _loopedMenus.length,
-            itemBuilder: (context, index) {
-              // Use the looped menu data
-              final menu = _loopedMenus[index];
-              return Card(
-                elevation: 5, // Set the card's shadow elevation
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16), // Rounded corners
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Padding(
+              padding: EdgeInsets.all(16.0),
+              child: TextField(
+                controller: _searchController,
+                decoration: InputDecoration(
+                  hintText: "Search menu items...",
+                  prefixIcon: Icon(Icons.search),
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(16)),
+                  filled: true,
+                  fillColor: Colors.white,
                 ),
-                margin: EdgeInsets.symmetric(
-                    horizontal:
-                    screenWidth * 0.04), // Adjust space between cards
-                child: SingleChildScrollView(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // Image widget to display the image for each menu item (Top half of the card)
-                      Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(
-                              16), // Rounded corners for the container
-                          border: Border.all(
-                            color: Colors.white, // Border color
-                            width: 2, // Border width
-                          ),
-                        ),
-                        height: screenHeight *
-                            0.25, // Set image height to half of the card height
-                        width: screenWidth * 0.8, // Maintain image width
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(
-                              16), // Ensure image respects the container's border radius
-                          child: Image.asset(
-                            menu["image"]!,
-                            fit: BoxFit.cover, // Adjust how the image is fitted
-                          ),
+              ),
+            ),
+            SizedBox(height: 40),
+            SizedBox(
+              height: screenHeight * 0.5,
+              child: filteredMenus.isEmpty
+                  ? Center(
+                      child: Text(
+                        "No items found",
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
                         ),
                       ),
-
-                      SizedBox(height: screenWidth * 0.004),
-                      // Text section (Bottom half of the card)
-                      Padding(
-                        padding: EdgeInsets.only(left: screenWidth * 0.04),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Text(
-                              menu["title"]!,
-                              style: TextStyle(
-                                fontSize: screenWidth * 0.09,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            Text(
-                              menu["subtitle"]!,
-                              style: TextStyle(
-                                  fontSize: screenWidth * 0.055,
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.w400),
-                            ),
-                            SizedBox(
-                                height: screenWidth *
-                                    0.038), // Add some space between the text and button
-                            Center(
-                              child: ElevatedButton(
-                                onPressed: () {
-                                  // Action for the "Order Now" button
-                                  print(
-                                      "Order Now clicked for ${menu["title"]}");
-                                },
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: Color(
-                                      0xFFC02626), // Set the background color to #C02626
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(
-                                        16), // Rounded corners
-                                  ),
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: 40,
-                                      vertical: 15), // Button padding
-                                ),
-                                child: Text(
-                                  "Order Now",
-                                  style: TextStyle(
-                                    fontSize:
-                                    screenWidth * 0.045, // Button text size
-                                    fontWeight:
-                                    FontWeight.bold, // Button text weight
-                                    color: Colors.white, // Button text color
+                    )
+                  : PageView.builder(
+                      controller: _pageController,
+                      itemCount: filteredMenus.length,
+                      itemBuilder: (context, index) {
+                        final menu = filteredMenus[index];
+                        return Card(
+                          elevation: 5,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                          margin: EdgeInsets.symmetric(
+                              horizontal: screenWidth * 0.04),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                height: screenHeight * 0.25,
+                                width: screenWidth * 0.8,
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(16),
+                                  child: Image.asset(
+                                    menu["image"]!,
+                                    fit: BoxFit.cover,
                                   ),
                                 ),
                               ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              );
-            },
-          ),
+                              Padding(
+                                padding: EdgeInsets.all(16.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      menu["title"]!,
+                                      style: TextStyle(
+                                        fontSize: screenWidth * 0.09,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    Text(
+                                      menu["subtitle"]!,
+                                      style: TextStyle(
+                                        fontSize: screenWidth * 0.055,
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                    SizedBox(height: 10),
+                                    Center(
+                                      child: ElevatedButton(
+                                        onPressed: () {
+                                          print(
+                                              "Order Now clicked for ${menu["title"]}");
+                                        },
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: Color(0xFFC02626),
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(16),
+                                          ),
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 40, vertical: 15),
+                                        ),
+                                        child: Text(
+                                          "Order Now",
+                                          style: TextStyle(
+                                            fontSize: screenWidth * 0.045,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                    ),
+            ),
+          ],
         ),
       ),
     );
@@ -193,15 +197,7 @@ class _MenucarouselState extends State<Menucarousel> {
   @override
   void dispose() {
     _pageController.dispose();
+    _searchController.dispose();
     super.dispose();
-  }
-}
-
-class MenuCard extends StatelessWidget {
-  const MenuCard({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Placeholder();
   }
 }
