@@ -1,6 +1,5 @@
 import 'package:cafesmart/utils/mytextfield.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import '../../constants/color.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -79,7 +78,8 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     child: const Text(
                       "Sign In",
-                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                     ),
                   ),
                 ),

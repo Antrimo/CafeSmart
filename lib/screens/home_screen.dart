@@ -10,7 +10,7 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(
-        children: [Background(), menuText(), Menucarousel()],
+        children: [Background(), Menucarousel()],
       ),
     );
   }

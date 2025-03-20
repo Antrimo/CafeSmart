@@ -33,10 +33,6 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Expense Tracker'),
-        backgroundColor: Colors.blueAccent,
-      ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -74,12 +70,13 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
                     ElevatedButton(
                       onPressed: _addExpense,
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.blueAccent,
+                        backgroundColor: Color(0xFFC02626),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
                       ),
-                      child: const Text('Add Expense', style: TextStyle(color: Colors.white)),
+                      child: const Text('Add Expense',
+                          style: TextStyle(color: Colors.white)),
                     ),
                   ],
                 ),
@@ -91,7 +88,8 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
                 itemCount: _expenses.length,
                 itemBuilder: (context, index) {
                   return Card(
-                    margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
+                    margin:
+                        const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
                     elevation: 3,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
@@ -108,7 +106,8 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
                         _expenses[index]['title'],
                         style: const TextStyle(fontWeight: FontWeight.bold),
                       ),
-                      subtitle: Text('₹${_expenses[index]['amount'].toStringAsFixed(2)}'),
+                      subtitle: Text(
+                          '₹${_expenses[index]['amount'].toStringAsFixed(2)}'),
                       trailing: IconButton(
                         icon: const Icon(Icons.delete, color: Colors.red),
                         onPressed: () => _deleteExpense(index),
