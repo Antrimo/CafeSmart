@@ -167,7 +167,7 @@ class _MenuCarouselState extends State<MenuCarousel> {
               return Card(
                 color: Colors.white,
                 margin:
-                    const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+                    const EdgeInsets.symmetric(vertical: 10.01, horizontal: 16),
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12)),
                 elevation: 5,
