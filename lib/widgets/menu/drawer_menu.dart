@@ -48,6 +48,7 @@ class _DrawerMenuState extends State<DrawerMenu> {
   @override
   Widget build(BuildContext context) {
     return HiddenDrawerMenu(
+      backgroundColorAppBar: Colors.white,
       screens: items,
       backgroundColorMenu: Color(0xFFC02626),
       slidePercent: 60.0,
