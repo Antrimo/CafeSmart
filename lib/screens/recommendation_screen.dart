@@ -63,6 +63,7 @@ class RecommendationScreen extends StatelessWidget {
               itemBuilder: (context, index) {
                 final food = recommendations[index];
                 return Card(
+                  color: Colors.white,
                   margin: EdgeInsets.only(bottom: screenWidth * 0.035),
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12)),

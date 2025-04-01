@@ -1,203 +1,288 @@
+import 'package:cafesmart/models/cartModel.dart';
+import 'package:cafesmart/models/menuModel.dart';
+import 'package:cafesmart/screens/introduction/pages/cartPage.dart';
+import 'package:cafesmart/utils/cartHelper.dart';
 import 'package:flutter/material.dart';
 
-class Menucarousel extends StatefulWidget {
-  const Menucarousel({super.key});
+class MenuCarousel extends StatefulWidget {
+  const MenuCarousel({super.key});
 
   @override
-  _MenucarouselState createState() => _MenucarouselState();
+  _MenuCarouselState createState() => _MenuCarouselState();
 }
 
-class _MenucarouselState extends State<Menucarousel> {
+class _MenuCarouselState extends State<MenuCarousel> {
   late PageController _pageController;
   TextEditingController _searchController = TextEditingController();
-  List<Map<String, String>> menus = [
-    {
-      "title": "Chana Kulcha",
-      "subtitle": "Special",
-      "image": "assets/images/menu/kulcha.png"
-    },
-    {
-      "title": "Pizza",
-      "subtitle": "Hot & Spicy",
-      "image": "assets/images/menu/pizza.png"
-    },
-    {
-      "title": "Dosa",
-      "subtitle": "Refreshing",
-      "image": "assets/images/menu/dosa.png"
-    },
-    {
-      "title": "Chana Kulcha",
-      "subtitle": "Special",
-      "image": "assets/images/menu/kulcha.png"
-    },
-    {
-      "title": "Pizza",
-      "subtitle": "Hot & Spicy",
-      "image": "assets/images/menu/pizza.png"
-    },
-    {
-      "title": "Dosa",
-      "subtitle": "Refreshing",
-      "image": "assets/images/menu/dosa.png"
-    },
+  List<CartItem> cart = [];
+
+  List<MenuModel> menus = [
+    MenuModel(
+        title: "Chana Kulcha",
+        subtitle: "Special",
+        image: "assets/images/menu/kulcha.png",
+        price: 35),
+    MenuModel(
+        title: "Pizza",
+        subtitle: "Hot & Spicy",
+        image: "assets/images/menu/pizza.png",
+        price: 80),
+    MenuModel(
+        title: "Dosa",
+        subtitle: "Refreshing",
+        image: "assets/images/menu/dosa.png",
+        price: 30),
+    MenuModel(
+        title: "Burger",
+        subtitle: "Spicy",
+        image: "assets/images/menu/burger.jpg",
+        price: 30),
+    MenuModel(
+        title: "Aloo Patties",
+        subtitle: "Hot & Spicy",
+        image: "assets/images/menu/aloo-patties.jpg",
+        price: 16),
+    MenuModel(
+        title: "Paneer Patties",
+        subtitle: "Refreshing",
+        image: "assets/images/menu/paneer-patties.jpg",
+        price: 25),
+    MenuModel(
+        title: "Chowmein",
+        subtitle: "Refreshing",
+        image: "assets/images/menu/chowmein.png",
+        price: 22),
   ];
 
-  List<Map<String, String>> filteredMenus = [];
+  List<MenuModel> filteredMenus = [];
 
   @override
   void initState() {
     super.initState();
     _pageController = PageController(viewportFraction: 0.85);
-    filteredMenus = menus; // Initially, show all items
+    filteredMenus = menus;
 
-    _searchController.addListener(() {
-      filterSearchResults(_searchController.text);
-    });
-  }
-
-  void filterSearchResults(String query) {
-    setState(() {
-      if (query.isEmpty) {
-        filteredMenus = menus;
-      } else {
-        filteredMenus = menus
-            .where((menu) =>
-                menu["title"]!.toLowerCase().contains(query.toLowerCase()))
-            .toList();
-      }
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
-
-    return Scaffold(
-      resizeToAvoidBottomInset: true,
-      backgroundColor: Colors.transparent,
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Padding(
-              padding: EdgeInsets.all(16.0),
-              child: TextField(
-                controller: _searchController,
-                decoration: InputDecoration(
-                  hintText: "Search menu items...",
-                  prefixIcon: Icon(Icons.search),
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(16)),
-                  filled: true,
-                  fillColor: Colors.white,
-                ),
-              ),
-            ),
-            SizedBox(height: 40),
-            SizedBox(
-              height: screenHeight * 0.5,
-              child: filteredMenus.isEmpty
-                  ? Center(
-                      child: Text(
-                        "No items found",
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
-                      ),
-                    )
-                  : PageView.builder(
-                      controller: _pageController,
-                      itemCount: filteredMenus.length,
-                      itemBuilder: (context, index) {
-                        final menu = filteredMenus[index];
-                        return Card(
-                          elevation: 5,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(16),
-                          ),
-                          margin: EdgeInsets.symmetric(
-                              horizontal: screenWidth * 0.04),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Container(
-                                height: screenHeight * 0.25,
-                                width: screenWidth * 0.8,
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(16),
-                                  child: Image.asset(
-                                    menu["image"]!,
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.all(16.0),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      menu["title"]!,
-                                      style: TextStyle(
-                                        fontSize: screenWidth * 0.09,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                    Text(
-                                      menu["subtitle"]!,
-                                      style: TextStyle(
-                                        fontSize: screenWidth * 0.055,
-                                        color: Colors.black,
-                                      ),
-                                    ),
-                                    SizedBox(height: 10),
-                                    Center(
-                                      child: ElevatedButton(
-                                        onPressed: () {
-                                          print(
-                                              "Order Now clicked for ${menu["title"]}");
-                                        },
-                                        style: ElevatedButton.styleFrom(
-                                          backgroundColor: Color(0xFFC02626),
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(16),
-                                          ),
-                                          padding: EdgeInsets.symmetric(
-                                              horizontal: 40, vertical: 15),
-                                        ),
-                                        child: Text(
-                                          "Order Now",
-                                          style: TextStyle(
-                                            fontSize: screenWidth * 0.045,
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.white,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        );
-                      },
-                    ),
-            ),
-          ],
-        ),
-      ),
-    );
+    // Load the cart from SharedPreferences
+    _loadCart();
+    _searchController.addListener(_filterMenus);
   }
 
   @override
   void dispose() {
-    _pageController.dispose();
     _searchController.dispose();
     super.dispose();
+  }
+
+  // Load the cart from SharedPreferences
+  void _loadCart() async {
+    List<CartItem> savedCart = await CartHelper.loadCart();
+    setState(() {
+      cart = savedCart;
+    });
+  }
+
+  void _filterMenus() {
+    String query = _searchController.text.toLowerCase();
+    setState(() {
+      filteredMenus = menus
+          .where((menu) =>
+              menu.title.toLowerCase().contains(query) ||
+              menu.subtitle.toLowerCase().contains(query))
+          .toList();
+    });
+  }
+
+  // Show a dialog to ask for the quantity
+  void _showQuantityDialog(MenuModel menu) {
+    int quantity = 1; // Start with quantity 1
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return AlertDialog(
+              title: Text('Select Quantity for ${menu.title}'),
+              content: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  IconButton(
+                    icon: Icon(Icons.remove),
+                    onPressed: () {
+                      if (quantity > 1) {
+                        setState(() {
+                          quantity--;
+                        });
+                      }
+                    },
+                  ),
+                  Text(
+                    '$quantity',
+                    style: TextStyle(fontSize: 24),
+                  ),
+                  IconButton(
+                    icon: Icon(Icons.add),
+                    onPressed: () {
+                      setState(() {
+                        quantity++;
+                      });
+                    },
+                  ),
+                ],
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: Text(
+                    'Cancel',
+                    style: TextStyle(color: Colors.black),
+                  ),
+                ),
+                TextButton(
+                  onPressed: () {
+                    if (quantity > 0) {
+                      // Add the item to the cart with the specified quantity
+                      _addToCart(menu, quantity);
+                      Navigator.pop(context);
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text("Quantity must be at least 1")),
+                      );
+                    }
+                  },
+                  child: Text(
+                    'Add to Cart',
+                    style: TextStyle(color: Colors.black),
+                  ),
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
+  }
+
+  // Method to add items to cart and save it to SharedPreferences
+  void _addToCart(MenuModel menu, int quantity) async {
+    setState(() {
+      cart.add(
+          CartItem(title: menu.title, price: menu.price, quantity: quantity));
+    });
+
+    // Save updated cart to SharedPreferences
+    await CartHelper.saveCart(cart);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.transparent,
+      body: Column(
+        children: [
+          // Search Bar
+          Padding(
+            padding: const EdgeInsets.all(10),
+            child: TextField(
+              controller: _searchController,
+              onChanged: (value) => _filterMenus(),
+              decoration: InputDecoration(
+                hintText: "Search for items...",
+                prefixIcon: const Icon(Icons.search, color: Colors.black),
+                filled: true,
+                fillColor: Colors.white,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide: BorderSide.none,
+                ),
+              ),
+            ),
+          ),
+
+          // Menu List
+          Expanded(
+            child: ListView.builder(
+              itemCount: filteredMenus.length,
+              itemBuilder: (context, index) {
+                final menu = filteredMenus[index];
+                return Card(
+                  color: Colors.white,
+                  margin:
+                      const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12)),
+                  elevation: 5,
+                  child: Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: Row(
+                      children: [
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(10),
+                          child: Image.asset(
+                            menu.image,
+                            width: 80,
+                            height: 80,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(menu.title,
+                                  style: const TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold)),
+                              Text(menu.subtitle,
+                                  style: const TextStyle(
+                                      fontSize: 14, color: Colors.black)),
+                              Text("₹${menu.price}",
+                                  style: const TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                      color: Color.fromARGB(255, 68, 134, 70))),
+                            ],
+                          ),
+                        ),
+                        ElevatedButton(
+                          onPressed: () => _showQuantityDialog(
+                              menu), // Show the quantity dialog
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Color(0xFFC02626),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30),
+                            ),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 20, vertical: 10),
+                          ),
+                          child: const Text("Add to Cart",
+                              style: TextStyle(color: Colors.white)),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => CartPage(cart: cart),
+            ),
+          );
+        },
+        backgroundColor: Color(0xFFC02626),
+        child: const Icon(
+          Icons.shopping_cart,
+          color: Colors.white,
+        ),
+      ),
+    );
   }
 }
