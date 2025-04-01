@@ -54,8 +54,8 @@ class _NavbarState extends State<Navbar> {
           onTabChange: _onItemTapped,
           tabs: const [
             GButton(icon: Icons.home, text: 'Home'),
-            GButton(icon: Icons.search, text: 'Recommendation'),
-            GButton(icon: Icons.person, text: 'Expense'),
+            GButton(icon: Icons.recommend, text: 'Recommendations'),
+            GButton(icon: Icons.attach_money, text: 'Expenses'),
           ],
         ),
       ),

@@ -26,7 +26,9 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
       _budget = prefs.getDouble('budget') ?? 0.0;
       _expenses = prefs.getStringList('expenses')?.map((e) {
             final data = e.split('|');
-            return {'title': data[0], 'amount': double.parse(data[1])};
+            final amountString = data[1].replaceAll(
+                RegExp(r'[^0-9.]'), ''); // Remove non-numeric characters
+            return {'title': data[0], 'amount': double.parse(amountString)};
           }).toList() ??
           [];
     });
@@ -67,7 +69,10 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
             controller: budgetController,
             keyboardType: TextInputType.number,
             decoration: const InputDecoration(
-                labelText: "Enter budget amount", fillColor: Colors.black),
+              labelText: "Enter budget amount",
+              labelStyle: TextStyle(color: Colors.black),
+              filled: true,
+            ),
           ),
           actions: [
             TextButton(
@@ -101,7 +106,6 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
     );
   }
 
-  // Function to manually add to the budget
   void _addToBudget() {
     TextEditingController budgetController = TextEditingController();
 
@@ -109,13 +113,17 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text("Add to Budget"),
+          title: const Text(
+            "Add to Budget",
+            style: TextStyle(color: Colors.black),
+          ),
           content: TextField(
             controller: budgetController,
             keyboardType: TextInputType.number,
             decoration: const InputDecoration(
               labelText: "Enter additional amount",
-              fillColor: Colors.black,
+              labelStyle: TextStyle(color: Colors.black),
+              filled: true,
             ),
           ),
           actions: [
@@ -173,46 +181,65 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
     _saveExpenses();
   }
 
-  void deductExpense(String title, double amount) {
-    if (amount <= _budget) {
-      setState(() {
-        _budget -= amount;
-        _expenses.add({'title': title, 'amount': amount});
-      });
-      _saveBudget(_budget);
-      _saveExpenses();
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              "Remaining Budget: ₹${_budget.toStringAsFixed(2)}",
-              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            Container(
+              alignment: Alignment.center,
+              padding: const EdgeInsets.all(12.0),
+              decoration: BoxDecoration(
+                color: Color(0xFFC02626),
+                borderRadius: BorderRadius.circular(12),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.3),
+                    spreadRadius: 3,
+                    blurRadius: 4,
+                    offset: Offset(0, 3),
+                  ),
+                ],
+              ),
+              child: Text(
+                "Remaining Budget: ₹${_budget.toStringAsFixed(2)}",
+                style: const TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white),
+              ),
             ),
-            const SizedBox(height: 10),
+            const SizedBox(height: 20),
             Expanded(
               child: ListView.builder(
                 itemCount: _expenses.length,
                 itemBuilder: (context, index) {
-                  return ListTile(
-                    title: Text(
-                      _expenses[index]['title'],
-                      style: TextStyle(color: Colors.black),
+                  return Card(
+                    elevation: 4,
+                    margin: const EdgeInsets.symmetric(vertical: 4),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
                     ),
-                    subtitle: Text(
-                      '₹${_expenses[index]['amount']}',
-                      style: TextStyle(color: Colors.black),
-                    ),
-                    trailing: IconButton(
-                      icon: const Icon(Icons.delete, color: Colors.red),
-                      onPressed: () => _deleteExpense(index),
+                    child: ListTile(
+                      contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 12),
+                      title: Text(
+                        _expenses[index]['title'],
+                        style: TextStyle(
+                            color: Colors.black, fontWeight: FontWeight.bold),
+                      ),
+                      subtitle: Text(
+                        '₹${_expenses[index]['amount']}',
+                        style: TextStyle(
+                            color: Colors.black, fontWeight: FontWeight.bold),
+                      ),
+                      trailing: IconButton(
+                        icon: const Icon(Icons.delete, color: Colors.red),
+                        onPressed: () => _deleteExpense(index),
+                      ),
                     ),
                   );
                 },
@@ -222,15 +249,15 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
         ),
       ),
       floatingActionButton: FloatingActionButton.extended(
-        backgroundColor: Colors.white,
+        backgroundColor: Color(0xFFC02626),
         onPressed: _addToBudget,
         label: const Text(
           "Add Budget",
-          style: TextStyle(color: Colors.black),
+          style: TextStyle(color: Colors.white),
         ),
         icon: const Icon(
           Icons.add,
-          color: Colors.black,
+          color: Colors.white,
         ),
       ),
     );

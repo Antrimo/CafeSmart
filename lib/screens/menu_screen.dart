@@ -1,6 +1,8 @@
+import 'package:cafesmart/models/cartModel.dart';
 import 'package:cafesmart/models/menuModel.dart';
+import 'package:cafesmart/screens/introduction/pages/cartPage.dart';
+import 'package:cafesmart/utils/cartHelper.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class MenuCarousel extends StatefulWidget {
   const MenuCarousel({super.key});
@@ -12,6 +14,7 @@ class MenuCarousel extends StatefulWidget {
 class _MenuCarouselState extends State<MenuCarousel> {
   late PageController _pageController;
   TextEditingController _searchController = TextEditingController();
+  List<CartItem> cart = [];
 
   List<MenuModel> menus = [
     MenuModel(
@@ -58,6 +61,9 @@ class _MenuCarouselState extends State<MenuCarousel> {
     super.initState();
     _pageController = PageController(viewportFraction: 0.85);
     filteredMenus = menus;
+
+    // Load the cart from SharedPreferences
+    _loadCart();
     _searchController.addListener(_filterMenus);
   }
 
@@ -65,6 +71,14 @@ class _MenuCarouselState extends State<MenuCarousel> {
   void dispose() {
     _searchController.dispose();
     super.dispose();
+  }
+
+  // Load the cart from SharedPreferences
+  void _loadCart() async {
+    List<CartItem> savedCart = await CartHelper.loadCart();
+    setState(() {
+      cart = savedCart;
+    });
   }
 
   void _filterMenus() {
@@ -78,160 +92,197 @@ class _MenuCarouselState extends State<MenuCarousel> {
     });
   }
 
-  Future<void> placeOrder(String title, int amount) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    double budget = prefs.getDouble('budget') ?? 0.0;
-
-    if (amount > budget) {
-      showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: const Text("Insufficient Budget"),
-            content: const Text(
-              "You do not have enough budget to place this order.",
-              style: TextStyle(color: Colors.red),
-            ),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(context),
-                child: const Text("OK"),
-              ),
-            ],
-          );
-        },
-      );
-      return;
-    }
-
-    // Deduct amount and save
-    budget -= amount;
-    await prefs.setDouble('budget', budget);
-
-    List<String> expenses = prefs.getStringList('expenses') ?? [];
-    expenses.add('$title|$amount');
-    await prefs.setStringList('expenses', expenses);
+  // Show a dialog to ask for the quantity
+  void _showQuantityDialog(MenuModel menu) {
+    int quantity = 1; // Start with quantity 1
 
     showDialog(
       context: context,
       builder: (context) {
-        return AlertDialog(
-          title: const Text("Order Placed"),
-          content: Text("$title ordered successfully!  ₹$amount deducted."),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text(
-                "OK",
-                style: TextStyle(color: Colors.black),
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return AlertDialog(
+              title: Text('Select Quantity for ${menu.title}'),
+              content: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  IconButton(
+                    icon: Icon(Icons.remove),
+                    onPressed: () {
+                      if (quantity > 1) {
+                        setState(() {
+                          quantity--;
+                        });
+                      }
+                    },
+                  ),
+                  Text(
+                    '$quantity',
+                    style: TextStyle(fontSize: 24),
+                  ),
+                  IconButton(
+                    icon: Icon(Icons.add),
+                    onPressed: () {
+                      setState(() {
+                        quantity++;
+                      });
+                    },
+                  ),
+                ],
               ),
-            ),
-          ],
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: Text(
+                    'Cancel',
+                    style: TextStyle(color: Colors.black),
+                  ),
+                ),
+                TextButton(
+                  onPressed: () {
+                    if (quantity > 0) {
+                      // Add the item to the cart with the specified quantity
+                      _addToCart(menu, quantity);
+                      Navigator.pop(context);
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text("Quantity must be at least 1")),
+                      );
+                    }
+                  },
+                  child: Text(
+                    'Add to Cart',
+                    style: TextStyle(color: Colors.black),
+                  ),
+                ),
+              ],
+            );
+          },
         );
       },
     );
+  }
 
-    setState(() {});
+  // Method to add items to cart and save it to SharedPreferences
+  void _addToCart(MenuModel menu, int quantity) async {
+    setState(() {
+      cart.add(
+          CartItem(title: menu.title, price: menu.price, quantity: quantity));
+    });
+
+    // Save updated cart to SharedPreferences
+    await CartHelper.saveCart(cart);
   }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        // Search Bar
-        Padding(
-          padding: const EdgeInsets.all(10),
-          child: TextField(
-            controller: _searchController,
-            onChanged: (value) =>
-                _filterMenus(), // Calls filter function on each keystroke
-            decoration: InputDecoration(
-              hintText: "Search for items...",
-              prefixIcon: const Icon(Icons.search, color: Colors.black),
-              filled: true,
-              fillColor: Colors.white, // White background
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10),
-                borderSide: BorderSide.none, // No border outline
+    return Scaffold(
+      backgroundColor: Colors.transparent,
+      body: Column(
+        children: [
+          // Search Bar
+          Padding(
+            padding: const EdgeInsets.all(10),
+            child: TextField(
+              controller: _searchController,
+              onChanged: (value) => _filterMenus(),
+              decoration: InputDecoration(
+                hintText: "Search for items...",
+                prefixIcon: const Icon(Icons.search, color: Colors.black),
+                filled: true,
+                fillColor: Colors.white,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide: BorderSide.none,
+                ),
               ),
             ),
           ),
-        ),
 
-        // Menu List
-        Expanded(
-          child: ListView.builder(
-            itemCount: filteredMenus.length,
-            itemBuilder: (context, index) {
-              final menu = filteredMenus[index];
-              return Card(
-                color: Colors.white,
-                margin:
-                    const EdgeInsets.symmetric(vertical: 10.01, horizontal: 16),
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12)),
-                elevation: 5,
-                child: Padding(
-                  padding: const EdgeInsets.all(12.0),
-                  child: Row(
-                    children: [
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(10),
-                        child: Image.asset(
-                          menu.image,
-                          width: 80,
-                          height: 80,
-                          fit: BoxFit.cover,
+          // Menu List
+          Expanded(
+            child: ListView.builder(
+              itemCount: filteredMenus.length,
+              itemBuilder: (context, index) {
+                final menu = filteredMenus[index];
+                return Card(
+                  color: Colors.white,
+                  margin:
+                      const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12)),
+                  elevation: 5,
+                  child: Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: Row(
+                      children: [
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(10),
+                          child: Image.asset(
+                            menu.image,
+                            width: 80,
+                            height: 80,
+                            fit: BoxFit.cover,
+                          ),
                         ),
-                      ),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              menu.title,
-                              style: const TextStyle(
-                                  fontSize: 18, fontWeight: FontWeight.bold),
-                            ),
-                            Text(
-                              menu.subtitle,
-                              style: const TextStyle(
-                                  fontSize: 14, color: Colors.black),
-                            ),
-                            Text(
-                              "₹${menu.price}",
-                              style: const TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.green),
-                            ),
-                          ],
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(menu.title,
+                                  style: const TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold)),
+                              Text(menu.subtitle,
+                                  style: const TextStyle(
+                                      fontSize: 14, color: Colors.black)),
+                              Text("₹${menu.price}",
+                                  style: const TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                      color: Color.fromARGB(255, 68, 134, 70))),
+                            ],
+                          ),
                         ),
-                      ),
-                      SizedBox(
-                        width: 100,
-                        height: 50,
-                        child: ElevatedButton(
+                        ElevatedButton(
+                          onPressed: () => _showQuantityDialog(
+                              menu), // Show the quantity dialog
                           style: ElevatedButton.styleFrom(
-                            backgroundColor:
-                                Colors.white, // Set background color to white
+                            backgroundColor: Color(0xFFC02626),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30),
+                            ),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 20, vertical: 10),
                           ),
-                          onPressed: () => placeOrder(menu.title, menu.price),
-                          child: const Text(
-                            "Order",
-                            style: TextStyle(color: Colors.black),
-                          ),
+                          child: const Text("Add to Cart",
+                              style: TextStyle(color: Colors.white)),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-              );
-            },
+                );
+              },
+            ),
           ),
+        ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => CartPage(cart: cart),
+            ),
+          );
+        },
+        backgroundColor: Color(0xFFC02626),
+        child: const Icon(
+          Icons.shopping_cart,
+          color: Colors.white,
         ),
-      ],
+      ),
     );
   }
 }

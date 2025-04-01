@@ -2,7 +2,7 @@ class MenuModel {
   final String title;
   final String subtitle;
   final String image;
-  final int price;
+  final double price;
 
   MenuModel({
     required this.title,

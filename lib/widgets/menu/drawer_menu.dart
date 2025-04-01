@@ -1,4 +1,5 @@
 import 'package:cafesmart/screens/menu/about_us_screen.dart';
+import 'package:cafesmart/screens/menu/order_history.dart';
 import 'package:cafesmart/screens/menu/profile_screen.dart';
 import 'package:cafesmart/widgets/navbar/navbar.dart';
 import 'package:flutter/material.dart';
@@ -22,6 +23,16 @@ class _DrawerMenuState extends State<DrawerMenu> {
             const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
       ),
       const Navbar(),
+    ),
+    ScreenHiddenDrawer(
+      ItemHiddenMenu(
+        name: "Order History",
+        baseStyle: TextStyle(color: Colors.white, fontSize: 20.0),
+        colorLineSelected: Colors.deepPurple,
+        selectedStyle:
+            const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+      ),
+      const OrderHistory(),
     ),
     ScreenHiddenDrawer(
       ItemHiddenMenu(
