@@ -1,5 +1,6 @@
 import 'package:cafesmart/screens/authentication/login_screen.dart';
 import 'package:cafesmart/screens/authentication/signup_screen.dart';
+import 'package:cafesmart/screens/choice.dart';
 import 'package:cafesmart/screens/splash_screen.dart';
 import 'package:cafesmart/screens/introduction/introduction_structure.dart';
 import 'package:cafesmart/widgets/menu/drawer_menu.dart';
@@ -39,6 +40,12 @@ class Routing extends StatelessWidget {
         path: '/home',
         builder: (BuildContext context, GoRouterState state) {
           return const DrawerMenu();
+        },
+      ),
+      GoRoute(
+        path: '/choice',
+        builder: (BuildContext context, GoRouterState state) {
+          return const RoleSelectionPage();
         },
       ),
     ],
