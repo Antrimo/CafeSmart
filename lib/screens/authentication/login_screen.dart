@@ -70,18 +70,19 @@ class _LoginScreenState extends State<LoginScreen> {
                   width: double.infinity,
                   child: ElevatedButton(
                     onPressed: () async {
-                          try {
-                            final user = await AuthService().login(
-                              emailController.text.trim(),
-                              passwordController.text.trim(),
-                            );
-                            if (user != null) {
-                              context.go('/home');
-                            }
-                          } catch (e) {
-                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString())));
-                          }
-                        },
+                      try {
+                        final user = await AuthService().login(
+                          emailController.text.trim(),
+                          passwordController.text.trim(),
+                        );
+                        if (user != null) {
+                          context.go('/choice');
+                        }
+                      } catch (e) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text(e.toString())));
+                      }
+                    },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.white,
                       foregroundColor: ColorConstants.primaryColor,
@@ -118,7 +119,8 @@ class _LoginScreenState extends State<LoginScreen> {
                         context.go('/home');
                       }
                     } catch (e) {
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString())));
+                      ScaffoldMessenger.of(context)
+                          .showSnackBar(SnackBar(content: Text(e.toString())));
                     }
                   },
                   child: Container(
