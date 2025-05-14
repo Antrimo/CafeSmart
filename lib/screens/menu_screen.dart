@@ -1,8 +1,11 @@
 import 'package:cafesmart/models/cartModel.dart';
 import 'package:cafesmart/models/menuModel.dart';
 import 'package:cafesmart/screens/introduction/pages/cartPage.dart';
+import 'package:cafesmart/screens/menu/order_history.dart';
 import 'package:cafesmart/utils/cartHelper.dart';
 import 'package:flutter/material.dart';
+
+// Import the OrderHistoryHelper
 
 class MenuCarousel extends StatefulWidget {
   const MenuCarousel({super.key});
@@ -55,6 +58,8 @@ class _MenuCarouselState extends State<MenuCarousel> {
   ];
 
   List<MenuModel> filteredMenus = [];
+  // Add this variable to track active SnackBars
+  ScaffoldFeatureController<SnackBar, SnackBarClosedReason>? _activeSnackBar;
 
   @override
   void initState() {
@@ -163,7 +168,7 @@ class _MenuCarouselState extends State<MenuCarousel> {
     );
   }
 
-  // Method to add items to cart and save it to SharedPreferences
+  // Modified method to add items to cart and show SnackBar without Hero conflict
   void _addToCart(MenuModel menu, int quantity) async {
     setState(() {
       cart.add(
@@ -172,6 +177,38 @@ class _MenuCarouselState extends State<MenuCarousel> {
 
     // Save updated cart to SharedPreferences
     await CartHelper.saveCart(cart);
+    
+    // Dismiss any existing SnackBar before showing a new one
+    if (_activeSnackBar != null) {
+      ScaffoldMessenger.of(context).hideCurrentSnackBar();
+    }
+    
+    // Show success message and store the controller
+    _activeSnackBar = ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text("${menu.title} added to cart"),
+        backgroundColor: Color(0xFFC02626),
+        duration: Duration(seconds: 1),
+        // Add a unique key to each SnackBar
+        key: UniqueKey(),
+      ),
+    );
+  }
+
+  // Method to place an order (called when user checkout from cart page)
+  void placeOrder() async {
+    if (cart.isNotEmpty) {
+      // Save the order to order history
+      await OrderHistoryHelper.addOrder(List.from(cart));
+      
+      // Clear the cart
+      setState(() {
+        cart = [];
+      });
+      
+      // Save empty cart to SharedPreferences
+      await CartHelper.saveCart(cart);
+    }
   }
 
   @override
@@ -273,7 +310,10 @@ class _MenuCarouselState extends State<MenuCarousel> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => CartPage(cart: cart),
+              builder: (context) => CartPage(
+                cart: cart,
+                onCheckout: placeOrder, // Pass the checkout callback
+              ),
             ),
           );
         },

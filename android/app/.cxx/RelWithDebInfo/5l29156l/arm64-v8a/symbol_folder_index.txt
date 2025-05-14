@@ -1,0 +1,1 @@
+/home/kartikey/CafeSmart/build/app/intermediates/cxx/RelWithDebInfo/5l29156l/obj/arm64-v8a

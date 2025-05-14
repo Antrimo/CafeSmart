@@ -1,15 +1,30 @@
+import 'dart:convert';
+
 class CartItem {
   final String title;
   final double price;
-  int quantity; // Add quantity field
+  final int quantity;
 
-  CartItem({required this.title, required this.price, this.quantity = 1});
+  CartItem({
+    required this.title,
+    required this.price,
+    required this.quantity,
+  });
 
-  double get totalPrice =>
-      price * quantity; // Calculate total price based on quantity
+  // Total price of this item (price * quantity)
+  double get totalPrice => price * quantity;
 
-  // Convert CartItem to a Map for saving to SharedPreferences
-  Map<String, dynamic> toMap() {
+  // Create a CartItem from JSON data
+  factory CartItem.fromJson(Map<String, dynamic> json) {
+    return CartItem(
+      title: json['title'],
+      price: json['price'].toDouble(),
+      quantity: json['quantity'],
+    );
+  }
+
+  // Convert CartItem to JSON
+  Map<String, dynamic> toJson() {
     return {
       'title': title,
       'price': price,
@@ -17,12 +32,32 @@ class CartItem {
     };
   }
 
-  // Convert Map to CartItem
-  factory CartItem.fromMap(Map<String, dynamic> map) {
+  // String representation for SharedPreferences
+  String toSharedPreferencesString() {
+    return json.encode(toJson());
+  }
+
+  // Create CartItem from SharedPreferences string
+  factory CartItem.fromSharedPreferencesString(String data) {
+    Map<String, dynamic> json = jsonDecode(data);
+    return CartItem.fromJson(json);
+  }
+
+  // Create a copy of this CartItem with modified properties
+  CartItem copyWith({
+    String? title,
+    double? price,
+    int? quantity,
+  }) {
     return CartItem(
-      title: map['title'],
-      price: map['price'],
-      quantity: map['quantity'] ?? 1,
+      title: title ?? this.title,
+      price: price ?? this.price,
+      quantity: quantity ?? this.quantity,
     );
+  }
+
+  @override
+  String toString() {
+    return 'CartItem{title: $title, price: $price, quantity: $quantity}';
   }
 }

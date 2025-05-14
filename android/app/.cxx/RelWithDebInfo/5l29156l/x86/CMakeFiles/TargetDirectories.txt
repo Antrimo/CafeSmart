@@ -1,0 +1,2 @@
+/home/kartikey/CafeSmart/android/app/.cxx/RelWithDebInfo/5l29156l/x86/CMakeFiles/edit_cache.dir
+/home/kartikey/CafeSmart/android/app/.cxx/RelWithDebInfo/5l29156l/x86/CMakeFiles/rebuild_cache.dir
