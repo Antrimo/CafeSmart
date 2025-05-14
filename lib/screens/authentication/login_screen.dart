@@ -1,5 +1,7 @@
+import 'package:cafesmart/screens/authentication/auth.dart';
 import 'package:cafesmart/utils/mytextfield.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import '../../constants/color.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -67,7 +69,19 @@ class _LoginScreenState extends State<LoginScreen> {
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () async {
+                          try {
+                            final user = await AuthService().login(
+                              emailController.text.trim(),
+                              passwordController.text.trim(),
+                            );
+                            if (user != null) {
+                              context.go('/home');
+                            }
+                          } catch (e) {
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString())));
+                          }
+                        },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.white,
                       foregroundColor: ColorConstants.primaryColor,
@@ -77,7 +91,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ),
                     child: const Text(
-                      "Sign In",
+                      "Login In",
                       style:
                           TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                     ),
@@ -97,7 +111,16 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 const SizedBox(height: 20),
                 GestureDetector(
-                  onTap: () {},
+                  onTap: () async {
+                    try {
+                      final user = await AuthService().signInWithGoogle();
+                      if (user != null) {
+                        context.go('/home');
+                      }
+                    } catch (e) {
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString())));
+                    }
+                  },
                   child: Container(
                     width: double.infinity,
                     padding: const EdgeInsets.symmetric(vertical: 12),
@@ -115,7 +138,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                         const SizedBox(width: 10),
                         const Text(
-                          "Sign in with Google",
+                          "Login in with Google",
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w600,

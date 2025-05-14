@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "522746161194",
+    "project_id": "cafesmart-7e206",
+    "storage_bucket": "cafesmart-7e206.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:522746161194:android:e3779fe907dd63d95cbb53",
+        "android_client_info": {
+          "package_name": "com.example.cafesmart"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "522746161194-f8uqmah8fsbf47k2b38ebls52sbhnccd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCisEBVr-CYU6K5d_fcnYnlh4GtMP5jXGc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "522746161194-f8uqmah8fsbf47k2b38ebls52sbhnccd.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "522746161194-t9gb593ce9cpfmvtcdec8j0ukbg5s6h8.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.cafesmart"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

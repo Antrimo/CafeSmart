@@ -1,0 +1,1 @@
+/home/kartikey/CafeSmart/build/app/intermediates/cxx/Debug/259204c5/obj/x86_64

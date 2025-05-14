@@ -1,0 +1,2 @@
+/home/kartikey/CafeSmart/android/app/.cxx/Debug/z650714g/x86/CMakeFiles/edit_cache.dir
+/home/kartikey/CafeSmart/android/app/.cxx/Debug/z650714g/x86/CMakeFiles/rebuild_cache.dir
